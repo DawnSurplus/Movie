@@ -1,42 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:movie/models/result_model.dart';
 
-class DetailScreen extends StatefulWidget {
-  const DetailScreen({super.key});
+class DetailScreen extends StatelessWidget {
+  final ResultModel movie;
 
-  @override
-  State<DetailScreen> createState() => _DetailScreenState();
-}
+  const DetailScreen({super.key, required this.movie});
 
-class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        surfaceTintColor: Colors.white,
-        shadowColor: Colors.black,
-        elevation: 1,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
         title: const Text(
-          "Movie Detail",
-          style: TextStyle(fontSize: 24),
+          "Back to list",
         ),
       ),
-      body: const Padding(
-        padding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Movie Name"),
-            SizedBox(height: 50,),
-            Text("Movie Rate"),
-            SizedBox(height: 50,),
-            Text("Movie Abstract"),
-            SizedBox(height: 50,),
-            Text("Movie Genre"),
-          ],
-        ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.network(
+              "https://image.tmdb.org/t/p/w500/${movie.posterPath}",
+              scale: 0.7,
+              fit: BoxFit.none,
+              alignment: Alignment.center,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                top: 250, left: 20, bottom: 20, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(movie.title,
+                    style: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white)),
+                const Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [                  
+                  Icon(Icons.star_outlined, color: Colors.white,),
+                  Icon(Icons.star_outlined, color: Colors.white,),
+                  Icon(Icons.star_outlined, color: Colors.white,),
+                  Icon(Icons.star_half_rounded, color: Colors.white,),
+                  Icon(Icons.star_outline_rounded, color: Colors.white,),
+                ],),
+                const SizedBox(height: 15,),
+                const Text("Science Fiction, Action, Adventure",
+                style: TextStyle(fontSize: 15, color: Colors.white)),
+                const SizedBox(
+                  height: 30,
+                ),
+                const Text("Storyline",
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white)),
+                Text(movie.overview,
+                    style: const TextStyle(fontSize: 15, color: Colors.white)),
+                const SizedBox(
+                  height: 50,
+                ),
+                const Text("Movie Genre"),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

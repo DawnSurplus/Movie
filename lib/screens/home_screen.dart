@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie/models/result_model.dart';
+import 'package:movie/screens/detail_screen.dart';
 import 'package:movie/services/api_service.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -35,21 +36,30 @@ class HomeScreen extends StatelessWidget {
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
                           var movie = snapshot.data![index];
-                          return Container(
-                            width: 300,
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 10,
-                                    offset: const Offset(5, 5),
-                                    color: Colors.black.withOpacity(0.1),
-                                  )
-                                ]),
-                            child: Image.network(
-                              "https://image.tmdb.org/t/p/w500/${movie.posterPath}",
-                              fit: BoxFit.fitWidth,
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DetailScreen(movie: movie),
+                                      fullscreenDialog: true));
+                            },
+                            child: Container(
+                              width: 300,
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 10,
+                                      offset: const Offset(5, 5),
+                                      color: Colors.black.withOpacity(0.1),
+                                    )
+                                  ]),
+                              child: Image.network(
+                                "https://image.tmdb.org/t/p/w500/${movie.posterPath}",
+                                fit: BoxFit.fitWidth,
+                              ),
                             ),
                           );
                         },
@@ -70,7 +80,7 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
               ),
               SizedBox(
-                height: 200,                
+                height: 200,
                 child: FutureBuilder(
                   future: nowPlayingMovies,
                   builder: (context, snapshot) {
@@ -84,8 +94,8 @@ class HomeScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           var movie = snapshot.data![index];
                           return SizedBox(
-                                  width: 140,
-                                  height: 175,
+                            width: 140,
+                            height: 175,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -151,8 +161,8 @@ class HomeScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           var movie = snapshot.data![index];
                           return SizedBox(
-                                  width: 140,
-                                  height: 175,
+                            width: 140,
+                            height: 175,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
