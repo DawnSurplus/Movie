@@ -1,14 +1,19 @@
+// ignore_for_file: non_constant_identifier_names, camel_case_types, constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:movie/models/result_model.dart';
-import 'package:movie/screens/detail_screen.dart';
 import 'package:movie/services/api_service.dart';
+import 'package:movie/widgets/poster_card_list.dart';
+import 'package:movie/widgets/title_text.dart';
+
+enum ENUM_MOVIE_CATEGORY { POPULAR, NOW_CINEMA, UPCOMING }
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   Future<List<ResultModel>> popularMovies = APIService.getPopularMovie();
   Future<List<ResultModel>> nowPlayingMovies = APIService.getNowPlayingMovie();
-  Future<List<ResultModel>> comingSoonMovies = APIService.getComingSoonMovie();
+  Future<List<ResultModel>> upcomingMovies = APIService.getComingSoonMovie();
 
   @override
   Widget build(BuildContext context) {
@@ -20,189 +25,26 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Popular Movies",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-              ),
-              SizedBox(
-                height: 200,
-                child: FutureBuilder(
-                  future: popularMovies,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.separated(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          var movie = snapshot.data![index];
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => DetailScreen(movie: movie),
-                                      fullscreenDialog: true));
-                            },
-                            child: Container(
-                              width: 300,
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 10,
-                                      offset: const Offset(5, 5),
-                                      color: Colors.black.withOpacity(0.1),
-                                    )
-                                  ]),
-                              child: Image.network(
-                                "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
-                                fit: BoxFit.fitWidth,
-                              ),
-                            ),
-                          );
-                        },
-                        separatorBuilder: (context, index) => const SizedBox(
-                          width: 20,
-                        ),
-                      );
-                    }
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
+              const TitleText(title: "Popular Movies"),
+              PosterCardList(
+                movies: popularMovies,
+                option: ENUM_MOVIE_CATEGORY.POPULAR,
               ),
               const SizedBox(
                 height: 20,
               ),
-              const Text(
-                "Now in Cinemas",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-              ),
-              SizedBox(
-                height: 200,
-                child: FutureBuilder(
-                  future: nowPlayingMovies,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.separated(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                        ),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          var movie = snapshot.data![index];
-                          return SizedBox(
-                            width: 140,
-                            height: 175,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 145,
-                                  height: 135,
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 10,
-                                          offset: const Offset(5, 5),
-                                          color: Colors.black.withOpacity(0.1),
-                                        )
-                                      ]),
-                                  child: Image.network(
-                                    "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
-                                    fit: BoxFit.fitWidth,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  movie.title,
-                                  softWrap: true,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        separatorBuilder: (context, index) => const SizedBox(
-                          width: 20,
-                        ),
-                      );
-                    }
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
+              const TitleText(title: "Now in Cinemas"),
+              PosterCardList(
+                movies: nowPlayingMovies,
+                option: ENUM_MOVIE_CATEGORY.NOW_CINEMA,
               ),
               const SizedBox(
                 height: 20,
               ),
-              const Text(
-                "Coming Soon",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-              ),
-              SizedBox(
-                height: 300,
-                child: FutureBuilder(
-                  future: comingSoonMovies,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.separated(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                        ),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          var movie = snapshot.data![index];
-                          return SizedBox(
-                            width: 140,
-                            height: 175,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 140,
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 10,
-                                          offset: const Offset(5, 5),
-                                          color: Colors.black.withOpacity(0.1),
-                                        )
-                                      ]),
-                                  child: Image.network(
-                                    "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  movie.title,
-                                  softWrap: true,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        separatorBuilder: (context, index) => const SizedBox(
-                          width: 20,
-                        ),
-                      );
-                    }
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
+              const TitleText(title: "Coming Soon"),
+              PosterCardList(
+                movies: upcomingMovies,
+                option: ENUM_MOVIE_CATEGORY.UPCOMING,
               ),
             ],
           ),
