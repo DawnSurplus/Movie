@@ -1,14 +1,41 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:movie/models/result_model.dart';
+import 'package:movie/models/detail_model.dart';
+import 'package:movie/services/api_service.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
+  const DetailScreen({super.key, required this.movieId});
+  final int movieId;
+
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
   static String TMDB_IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 
-  final ResultModel movie;
+  late DetailModel detailMovie;
+  bool isLoading = true;
 
-  const DetailScreen({super.key, required this.movie});
+  void waitForDetailModel() async {
+    try{
+detailMovie = await APIService.getDetailMovie(id: widget.movieId);
+
+    setState(() {
+      isLoading = false;
+    });
+    }
+    catch (e){
+
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    waitForDetailModel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +48,13 @@ class DetailScreen extends StatelessWidget {
           "Back to list",
         ),
       ),
-      body: Stack(
-        children: [
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Stack(
+                  children: [
           Positioned.fill(
             child: Image.network(
-              "$TMDB_IMAGE_URL/${movie.poster_path}",
+              "$TMDB_IMAGE_URL/${detailMovie.poster_path}",
               scale: 0.7,
               fit: BoxFit.none,
               alignment: Alignment.center,
@@ -33,11 +62,11 @@ class DetailScreen extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(
-                top: 200, left: 20, bottom: 20, right: 20),
+                top: 150, left: 20, bottom: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(movie.title,
+                Text(detailMovie.title,
                     style: const TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w800,
@@ -45,18 +74,21 @@ class DetailScreen extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    for (int i = movie.vote_average.floor(); i >= 2; i -= 2)
+                    for (int i = detailMovie.vote_average.floor();
+                        i >= 2;
+                        i -= 2)
                       const Icon(Icons.star_outlined, color: Colors.white),
-                    if (movie.vote_average % 1 > 0)
-                      const Icon(Icons.star_half_rounded,
-                          color: Colors.white),
-                    for (int i = (10 - movie.vote_average).floor(); i >= 2; i -= 2)
+                    if (detailMovie.vote_average % 1 > 0)
+                      const Icon(Icons.star_half_rounded, color: Colors.white),
+                    for (int i = (10 - detailMovie.vote_average).floor();
+                        i >= 2;
+                        i -= 2)
                       const Icon(Icons.star_outline_rounded,
                           color: Colors.white),
                     const SizedBox(
                       width: 10,
                     ),
-                    Text("${movie.vote_average}",
+                    Text("${detailMovie.vote_average}",
                         style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
@@ -66,8 +98,13 @@ class DetailScreen extends StatelessWidget {
                 const SizedBox(
                   height: 15,
                 ),
-                const Text("Science Fiction, Action, Adventure",
-                    style: TextStyle(fontSize: 15, color: Colors.white)),
+                Row(
+                  children: [
+                    for (var genre in detailMovie.genres)
+                      Text("${genre.name} / ",
+                          style: const TextStyle(fontSize: 15, color: Colors.white)),
+                  ],
+                ),
                 const SizedBox(
                   height: 30,
                 ),
@@ -76,14 +113,13 @@ class DetailScreen extends StatelessWidget {
                         fontSize: 30,
                         fontWeight: FontWeight.w600,
                         color: Colors.white)),
-                Text(movie.overview,
-                    style:
-                        const TextStyle(fontSize: 15, color: Colors.white)),
+                Text(detailMovie.overview,
+                    style: const TextStyle(fontSize: 15, color: Colors.white)),
               ],
             ),
           ),
-        ],
-      ),
+                  ],
+                ),
     );
   }
 }

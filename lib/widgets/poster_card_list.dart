@@ -51,7 +51,7 @@ class PosterCardList extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => DetailScreen(movie: movie),
+                            builder: (context) => DetailScreen(movieId: movie.id),
                             fullscreenDialog: true));
                   },
                   child: PosterCard(
