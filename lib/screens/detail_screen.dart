@@ -19,16 +19,10 @@ class _DetailScreenState extends State<DetailScreen> {
   bool isLoading = true;
 
   void waitForDetailModel() async {
-    try{
-detailMovie = await APIService.getDetailMovie(id: widget.movieId);
+    detailMovie = await APIService.getDetailMovie(id: widget.movieId);
 
-    setState(() {
-      isLoading = false;
-    });
-    }
-    catch (e){
-
-    }
+    isLoading = false;
+    setState(() {});
   }
 
   @override
@@ -42,6 +36,11 @@ detailMovie = await APIService.getDetailMovie(id: widget.movieId);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white), // 원하는 아이콘 설정
+          onPressed: () {
+            Navigator.pop(context); // 이전 화면으로 이동
+          },),
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
         title: const Text(
@@ -51,75 +50,79 @@ detailMovie = await APIService.getDetailMovie(id: widget.movieId);
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Stack(
-                  children: [
-          Positioned.fill(
-            child: Image.network(
-              "$TMDB_IMAGE_URL/${detailMovie.poster_path}",
-              scale: 0.7,
-              fit: BoxFit.none,
-              alignment: Alignment.center,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 150, left: 20, bottom: 20, right: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(detailMovie.title,
-                    style: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white)),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (int i = detailMovie.vote_average.floor();
-                        i >= 2;
-                        i -= 2)
-                      const Icon(Icons.star_outlined, color: Colors.white),
-                    if (detailMovie.vote_average % 1 > 0)
-                      const Icon(Icons.star_half_rounded, color: Colors.white),
-                    for (int i = (10 - detailMovie.vote_average).floor();
-                        i >= 2;
-                        i -= 2)
-                      const Icon(Icons.star_outline_rounded,
-                          color: Colors.white),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text("${detailMovie.vote_average}",
-                        style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white)),
-                  ],
+                Positioned.fill(
+                  child: Image.network(
+                    "$TMDB_IMAGE_URL/${detailMovie.poster_path}",
+                    scale: 0.7,
+                    fit: BoxFit.none,
+                    alignment: Alignment.center,
+                  ),
                 ),
-                const SizedBox(
-                  height: 15,
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 150, left: 20, bottom: 20, right: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(detailMovie.title,
+                          style: const TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white)),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (int i = detailMovie.vote_average.floor();
+                              i >= 2;
+                              i -= 2)
+                            const Icon(Icons.star_outlined,
+                                color: Colors.white),
+                          if (detailMovie.vote_average % 1 > 0)
+                            const Icon(Icons.star_half_rounded,
+                                color: Colors.white),
+                          for (int i = (10 - detailMovie.vote_average).floor();
+                              i >= 2;
+                              i -= 2)
+                            const Icon(Icons.star_outline_rounded,
+                                color: Colors.white),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text("${detailMovie.vote_average}",
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white)),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        children: [
+                          for (var genre in detailMovie.genres)
+                            Text("${genre.name} / ",
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.white)),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Text("Storyline",
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white)),
+                      Text(detailMovie.overview,
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.white)),
+                    ],
+                  ),
                 ),
-                Row(
-                  children: [
-                    for (var genre in detailMovie.genres)
-                      Text("${genre.name} / ",
-                          style: const TextStyle(fontSize: 15, color: Colors.white)),
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                const Text("Storyline",
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white)),
-                Text(detailMovie.overview,
-                    style: const TextStyle(fontSize: 15, color: Colors.white)),
               ],
             ),
-          ),
-                  ],
-                ),
     );
   }
 }
