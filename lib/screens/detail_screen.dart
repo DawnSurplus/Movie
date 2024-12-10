@@ -1,7 +1,11 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:movie/models/result_model.dart';
 
 class DetailScreen extends StatelessWidget {
+  static String TMDB_IMAGE_URL = "https://image.tmdb.org/t/p/w500";
+
   final ResultModel movie;
 
   const DetailScreen({super.key, required this.movie});
@@ -21,7 +25,7 @@ class DetailScreen extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.network(
-              "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
+              "$TMDB_IMAGE_URL/${movie.poster_path}",
               scale: 0.7,
               fit: BoxFit.none,
               alignment: Alignment.center,
@@ -29,7 +33,7 @@ class DetailScreen extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(
-                top: 250, left: 20, bottom: 20, right: 20),
+                top: 200, left: 20, bottom: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -38,18 +42,32 @@ class DetailScreen extends StatelessWidget {
                         fontSize: 30,
                         fontWeight: FontWeight.w800,
                         color: Colors.white)),
-                const Row(
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [                  
-                  Icon(Icons.star_outlined, color: Colors.white,),
-                  Icon(Icons.star_outlined, color: Colors.white,),
-                  Icon(Icons.star_outlined, color: Colors.white,),
-                  Icon(Icons.star_half_rounded, color: Colors.white,),
-                  Icon(Icons.star_outline_rounded, color: Colors.white,),
-                ],),
-                const SizedBox(height: 15,),
+                  children: [
+                    for (int i = movie.vote_average.floor(); i >= 2; i -= 2)
+                      const Icon(Icons.star_outlined, color: Colors.white),
+                    if (movie.vote_average % 1 > 0)
+                      const Icon(Icons.star_half_rounded,
+                          color: Colors.white),
+                    for (int i = (10 - movie.vote_average).floor(); i >= 2; i -= 2)
+                      const Icon(Icons.star_outline_rounded,
+                          color: Colors.white),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text("${movie.vote_average}",
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white)),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
                 const Text("Science Fiction, Action, Adventure",
-                style: TextStyle(fontSize: 15, color: Colors.white)),
+                    style: TextStyle(fontSize: 15, color: Colors.white)),
                 const SizedBox(
                   height: 30,
                 ),
@@ -59,11 +77,8 @@ class DetailScreen extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         color: Colors.white)),
                 Text(movie.overview,
-                    style: const TextStyle(fontSize: 15, color: Colors.white)),
-                const SizedBox(
-                  height: 50,
-                ),
-                const Text("Movie Genre"),
+                    style:
+                        const TextStyle(fontSize: 15, color: Colors.white)),
               ],
             ),
           ),
