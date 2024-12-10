@@ -1,32 +1,30 @@
 class ResultModel {
-  final bool adult;
-  final String backdropPath;
-  final num id;
-  final List<dynamic> genreIds;
-  final String originalLanguage;
-  final String originalTitle;
-  final String overview;
-  final double popularity;
-  final String posterPath;
-  final String releaseDate;
-  final String title;
-  final bool video;
-  final num voteAverage;
-  final num voteCount;
+  final adult;
+  final backdrop_path;
+  final id;
+  final original_language;
+  final original_title;
+  final overview;
+  final popularity;
+  final poster_path;
+  final release_date;
+  final title;
+  final video;
+  final vote_average;
+  final vote_count;
 
-  ResultModel.formJson(Map<String, dynamic> json)
-      : adult = json['adult'],
-        backdropPath = json['backdrop_path'],
-        genreIds = json['genre_ids'],
-        id = json['id'],
-        originalLanguage = json['original_language'],
-        originalTitle = json['original_title'],
-        overview = json['overview'],
-        popularity = json['popularity'],
-        posterPath = json['poster_path'],
-        releaseDate = json['release_date'],
-        title = json['title'],
-        video = json['video'],
-        voteAverage = json['vote_average'],
-        voteCount = json['vote_count'];
+  ResultModel.fromJson(Map<String, dynamic> json)
+  : adult = json['adult'],
+    backdrop_path = json['backdrop_path'],
+    id = json['id'],
+    original_language = json['original_language'],
+    original_title = json['original_title'],
+    overview = json['overview'],
+    popularity = json['popularity'],
+    poster_path = json['poster_path'],
+    release_date = json['release_date'],
+    title = json['title'],
+    video = json['video'],
+    vote_average = json['vote_average'],
+    vote_count = json['vote_count'];
 }

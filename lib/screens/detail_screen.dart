@@ -21,7 +21,7 @@ class DetailScreen extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.network(
-              "https://image.tmdb.org/t/p/w500/${movie.posterPath}",
+              "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
               scale: 0.7,
               fit: BoxFit.none,
               alignment: Alignment.center,

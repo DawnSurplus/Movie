@@ -3,12 +3,12 @@
 import 'package:movie/models/date_model.dart';
 import 'package:movie/models/result_model.dart';
 
-class NowPlayingModel {
+class UpcomingModel {
   final DateModel dates;
   final num page, total_pages, total_results;
   final List<ResultModel> results;
 
-  NowPlayingModel.fromJson(Map<String, dynamic> json)
+  UpcomingModel.fromJson(Map<String, dynamic> json)
       : dates = DateModel.fromJson(json['dates']),
         page = json['page'],
         results = (json['results'] as List)

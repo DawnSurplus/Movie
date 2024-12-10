@@ -1,14 +1,16 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:movie/models/result_model.dart';
 
-class MoviePopularModel {
-  final num page, totalPages, totalResults;
+class PopularModel {
+  final num page, total_pages, total_results;
   final List<ResultModel> results;
 
-  MoviePopularModel.formJson(Map<String, dynamic> json)
+  PopularModel.fromJson(Map<String, dynamic> json)
       : page = json["page"],
         results = (json['results'] as List)
-            .map((item) => ResultModel.formJson(item))
+            .map((item) => ResultModel.fromJson(item))
             .toList(),
-        totalPages = json['total_pages'],
-        totalResults = json['total_results'];
+        total_pages = json['total_pages'],
+        total_results = json['total_results'];
 }

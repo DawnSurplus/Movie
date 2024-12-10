@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                                     )
                                   ]),
                               child: Image.network(
-                                "https://image.tmdb.org/t/p/w500/${movie.posterPath}",
+                                "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
                                 fit: BoxFit.fitWidth,
                               ),
                             ),
@@ -113,7 +113,7 @@ class HomeScreen extends StatelessWidget {
                                         )
                                       ]),
                                   child: Image.network(
-                                    "https://image.tmdb.org/t/p/w500/${movie.posterPath}",
+                                    "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
                                     fit: BoxFit.fitWidth,
                                   ),
                                 ),
@@ -179,7 +179,7 @@ class HomeScreen extends StatelessWidget {
                                         )
                                       ]),
                                   child: Image.network(
-                                    "https://image.tmdb.org/t/p/w500/${movie.posterPath}",
+                                    "https://image.tmdb.org/t/p/w500/${movie.poster_path}",
                                   ),
                                 ),
                                 const SizedBox(
